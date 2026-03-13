@@ -38,6 +38,8 @@ uk_policebadge = {
 
 2. Add an inventory icon named `uk_policebadge.png` to `qb-inventory/html/images`
 
+   A ready-to-copy icon is included in this repo at `install/qb-inventory/uk_policebadge.png`
+
 The runtime badge artwork used by this resource is stored at `resource/web/img/badge.png`.
 
 ## Preview
