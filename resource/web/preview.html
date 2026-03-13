@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Police Badge</title>
+    <title>Badge Preview</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="preview-mode">
     <div id="badge-container">
         <img id="badge-img" src="img/badge.png" alt="Badge background">
         <img id="background-img" src="img/none.png" alt="Officer photo">
@@ -14,6 +14,16 @@
         <div id="name" class="field"></div>
     </div>
 
+    <script>
+        window.__UK_BADGE_PREVIEW__ = {
+            data: {
+                rank: 'Inspector',
+                name: 'Bob Workington',
+                photo: 'img/none.png'
+            },
+            hideAfter: 0
+        };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

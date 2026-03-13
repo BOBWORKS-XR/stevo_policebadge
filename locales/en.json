@@ -1,11 +1,10 @@
 {
-    "department_name": "Victoria Police",
-    "progress_label": "Showing Badge",
-    "not_police": "You are not a police officer!",
-    "not_now": "You cannot use this now!",
-    "input_title": "Badge Photo",
-    "input_text": "Badge Photo URL",
-    "no_photo": "You didn't enter a photo",
-    "update_badge_photo_success": "Successfully updated your Badge Photo!",
-    "update_badge_photo_fail": "Failed to set new Badge Photo, try again!"
+    "progress_label": "Showing warrant card",
+    "not_police": "You are not authorised to use this warrant card.",
+    "not_now": "You cannot use the warrant card right now.",
+    "input_title": "Warrant Card Photo",
+    "input_text": "Photo URL",
+    "no_photo": "You did not enter a photo URL.",
+    "update_badge_photo_success": "Warrant card photo updated.",
+    "update_badge_photo_fail": "Could not update the warrant card photo."
 }

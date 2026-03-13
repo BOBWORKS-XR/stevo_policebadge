@@ -1,107 +1,121 @@
-if not lib.checkDependency('stevo_lib', '1.6.0') then error('You need to update stevo_lib to the latest version for stevo_policebadges.') end
+if not lib.checkDependency('stevo_lib', '1.6.0') then
+    error('uk_policebadge requires stevo_lib 1.6.0 or newer.')
+end
+
 lib.locale()
-print('stevo_policebadge is depreciated, you can be our new and vastly improved version on our tebex: store.stevoscripts.com')
 
 local config = lib.require('config')
 local stevo_lib = exports['stevo_lib']:import()
 local CURRENTLY_USING_BADGE = false
 
+local function isAuthorisedJob()
+    local job = stevo_lib.GetPlayerGroups()
+    if type(job) == 'table' then
+        job = job[1]
+    end
+
+    for i = 1, #(config.job_names or {}) do
+        if config.job_names[i] == job then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function getNearbyServerIds()
+    local radius = tonumber(config.badge_show_radius) or 3.0
+    local players = lib.getNearbyPlayers(GetEntityCoords(PlayerPedId()), radius, false)
+    local nearby = {}
+
+    for i = 1, #players do
+        nearby[#nearby + 1] = GetPlayerServerId(players[i].id)
+    end
+
+    return nearby
+end
 
 local function showBadge()
     CURRENTLY_USING_BADGE = true
-    local badge_data = lib.callback.await("stevo_policebadge:retrieveInfo", false)
 
-    SendNUIMessage({ type = "displayBadge", data = badge_data })
+    local badgeData = lib.callback.await('uk_policebadge:retrieveInfo', false)
+    SendNUIMessage({
+        type = 'displayBadge',
+        data = badgeData,
+        hideAfter = config.badge_show_time
+    })
 
-    local players = lib.getNearbyPlayers(GetEntityCoords(PlayerPedId()), 3, false)
-    if #players > 0 then
-        local ply = {}
-        for i = 1, #players do
-            table.insert(ply, GetPlayerServerId(players[i].id))
-        end
-        TriggerServerEvent('stevo_policebadge:showbadge', badge_data, ply)
+    local nearby = getNearbyServerIds()
+    if #nearby > 0 then
+        TriggerServerEvent('uk_policebadge:showbadge', badgeData, nearby)
     end
 
+    local progress = config.progress or {}
     lib.progressBar({
         duration = config.badge_show_time,
-        label = locale('progress_label'),
+        label = progress.label or locale('progress_label'),
         useWhileDead = false,
         canCancel = true,
         disable = {
             car = true,
         },
-        anim = {
-            dict = "paper_1_rcm_alt1-8",
-            clip = "player_one_dual-8"
-        },
-        prop = {
-            bone = 28422,
-            model = "prop_fib_badge",
-            pos = vec3(0.0600,0.0210,-0.0400),
-            rot = vec3(-90.00,-180.00,78.999)
-        },
+        anim = progress.anim,
+        prop = progress.prop,
     })
 
     CURRENTLY_USING_BADGE = false
 end
 
-RegisterNetEvent('stevo_policebadge:use', function()
-    local job, gang = stevo_lib.GetPlayerGroups()
+RegisterNetEvent('uk_policebadge:use', function()
     local swimming = IsPedSwimmingUnderWater(cache.ped)
-    local incar = IsPedInAnyVehicle(cache.ped, true)
-    local job_auth = false
+    local inVehicle = IsPedInAnyVehicle(cache.ped, true)
 
-    
-    for _, group in pairs (config.job_names) do    
-        if group == job then 
-            job_auth = true
-        end
+    if not isAuthorisedJob() then
+        return stevo_lib.Notify(locale('not_police'), 'error', 3000)
     end
 
-    if not job_auth then return stevo_lib.Notify(locale('not_police'), 'error', 3000) end
+    if swimming or inVehicle then
+        return stevo_lib.Notify(locale('not_now'), 'error', 3000)
+    end
 
-    if swimming or incar then return stevo_lib.Notify(locale('not_now'), 'error', 3000) end
-
-    if CURRENTLY_USING_BADGE then return end
+    if CURRENTLY_USING_BADGE then
+        return
+    end
 
     showBadge()
 end)
 
-RegisterNetEvent('stevo_policebadge:displaybadge')
-AddEventHandler('stevo_policebadge:displaybadge', function(data)
-    SendNUIMessage({ type = "displayBadge", data = data })
+RegisterNetEvent('uk_policebadge:displaybadge', function(data)
+    SendNUIMessage({
+        type = 'displayBadge',
+        data = data,
+        hideAfter = config.badge_show_time
+    })
 end)
 
 RegisterCommand(config.set_image_command, function()
-    local job, gang = stevo_lib.GetPlayerGroups()
-
-    local job_auth = false
-
-    
-    for _, group in pairs (config.job_names) do    
-        if group == job then 
-            job_auth = true
-        end
+    if not isAuthorisedJob() then
+        stevo_lib.Notify(locale('not_police'), 'error', 3000)
+        return
     end
 
-    if not job_auth then stevo_lib.Notify(locale('not_police'), 'error', 3000) return end
+    local input = lib.inputDialog(locale('input_title'), { locale('input_text') })
+    if not input or not input[1] then
+        stevo_lib.Notify(locale('no_photo'), 'error', 3000)
+        return
+    end
 
-
-    local input = lib.inputDialog(locale('input_title'), {locale('input_text')})
- 
-    if not input then stevo_lib.Notify(locale('no_photo'), 'error', 3000) return end
-
-    local setBadge = lib.callback.await("stevo_policebadge:setBadgePhoto", false, input[1])
-    if setBadge then
+    local ok = lib.callback.await('uk_policebadge:setBadgePhoto', false, input[1])
+    if ok then
         lib.alertDialog({
-            header = locale('department_name'),
+            header = config.department_name or 'Police',
             content = locale('update_badge_photo_success'),
             centered = true,
             cancel = false
         })
     else
         lib.alertDialog({
-            header = locale('department_name'),
+            header = config.department_name or 'Police',
             content = locale('update_badge_photo_fail'),
             centered = true,
             cancel = false

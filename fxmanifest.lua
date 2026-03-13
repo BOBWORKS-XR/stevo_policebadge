@@ -3,9 +3,9 @@ game 'gta5'
 use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 
-author "Stevo Scripts | Steve & Blacklist"
-description 'Badge system for police to prove identity.'
-version '1.5.6'
+author 'Bobman forked from Stevo Scripts'
+description 'UK-style police warrant card resource with QBCore-first metadata support.'
+version '1.0.0'
 
 ui_page 'resource/web/index.html'
 
@@ -22,7 +22,6 @@ server_scripts {
     'resource/server.lua',
     '@oxmysql/lib/MySQL.lua'
 }
-
 
 files {
     'resource/web/index.html',

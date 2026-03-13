@@ -1,53 +1,51 @@
-# ⚠️ This Resource is Deprecated
+# uk_policebadge
 
-We **no longer support** this resource. It is recommended you use [**Stevo Job Badges**](https://stevoscripts.com/store/6839709) instead.
+UK-oriented fork of `stevo_policebadge`, adapted for a warrant-card style display and aimed at QBCore while still keeping `stevo_lib` as the framework bridge.
 
-🔗 **Preview:** [Watch on YouTube](https://youtu.be/nAUoMv2nwAs?si=_ghgvFeKz-5BFrSi)
-🛒 **Store Link:** [View on Stevo Scripts](https://stevoscripts.com/store/6839709)
+## Dependencies
 
----
+- `ox_lib`
+- `oxmysql`
+- `stevo_lib`
 
-## ❗ Use at Your Own Risk
+## Default QBCore metadata keys
 
-> This resource is no longer maintained or supported.
-> Only download if you are comfortable using it **without assistance**.
+- Badge number: `badge`, `badge_number`, `badgeNumber`, `collar`
+- Callsign: `callsign`, `callSign`
 
----
+Change these in [config.lua](C:/Users/bobman/fivem-qbcore-local/data/resources/[local]/uk_policebadge/config.lua) if your server uses different metadata.
 
-## 🚔 `stevo_policebadge` – Version 1.5.6
+## QBCore install notes
 
-Badges for your police officers to identify themselves with style and realism.
+This repository contains the `uk_policebadge` resource itself.
 
-### ✨ Features
+These two QBCore integration steps live outside this repo and must be applied on the target server:
 
-* ✅ Highly Configurable
-* 🧠 100% Optimized
-* 🎯 Realistic Badge System
-* 📦 Supports **All Inventories**
-* ⚙️ Compatible with **ESX**, **QBCore**, and **Qbox**
+1. Add the item in `qb-core/shared/items.lua`
+```lua
+uk_policebadge = {
+    name = 'uk_policebadge',
+    label = 'Warrant Card',
+    weight = 0,
+    type = 'item',
+    image = 'uk_policebadge.png',
+    unique = true,
+    useable = true,
+    shouldClose = false,
+    description = 'Official police warrant card for identifying yourself on duty'
+},
+```
 
-### 📹 Preview
+2. Add an inventory icon named `uk_policebadge.png` to `qb-inventory/html/images`
 
-▶️ [Watch Demo on YouTube](https://youtu.be/HErP1xbOyoY)
+The runtime badge artwork used by this resource is stored at `resource/web/img/badge.png`.
 
-### 📚 Documentation
+## Preview
 
-📖 [View the Docs](https://docs.stevoscripts.com/free-scripts/stevo_policebadge)
+Open `resource/web/preview.html` in a browser to check text placement against `resource/web/img/badge.png`.
 
----
+## Notes
 
-## 🌐 More from Stevo Scripts
-
-* 💬 [Join the Discord](https://discord.gg/stevoscripts)
-* 🌍 [Visit Our Website](https://www.stevoscripts.com)
-
----
-
-## 🙏 Credits
-
-* **Trident Developments** – Badge Assets
-* **Blacklist** – Frontend Development
-* **Apollo Studios** – Badge Image Pull Request
-* **Brave Developments** – Job Grade Label Pull Request
-
-
+- The resource item name defaults to `uk_policebadge`.
+- Photo records are stored in the `uk_policebadge_photos` table by default.
+- Department name and warrant-card wording are config-driven rather than locale-driven.
