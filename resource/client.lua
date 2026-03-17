@@ -1,5 +1,5 @@
 if not lib.checkDependency('stevo_lib', '1.6.0') then
-    error('uk_policebadge requires stevo_lib 1.6.0 or newer.')
+    error('stevo_policebadge requires stevo_lib 1.6.0 or newer.')
 end
 
 lib.locale()
@@ -38,7 +38,7 @@ end
 local function showBadge()
     CURRENTLY_USING_BADGE = true
 
-    local badgeData = lib.callback.await('uk_policebadge:retrieveInfo', false)
+    local badgeData = lib.callback.await('stevo_policebadge:retrieveInfo', false)
     SendNUIMessage({
         type = 'displayBadge',
         data = badgeData,
@@ -47,7 +47,7 @@ local function showBadge()
 
     local nearby = getNearbyServerIds()
     if #nearby > 0 then
-        TriggerServerEvent('uk_policebadge:showbadge', badgeData, nearby)
+        TriggerServerEvent('stevo_policebadge:showbadge', badgeData, nearby)
     end
 
     local progress = config.progress or {}
@@ -66,7 +66,7 @@ local function showBadge()
     CURRENTLY_USING_BADGE = false
 end
 
-RegisterNetEvent('uk_policebadge:use', function()
+RegisterNetEvent('stevo_policebadge:use', function()
     local swimming = IsPedSwimmingUnderWater(cache.ped)
     local inVehicle = IsPedInAnyVehicle(cache.ped, true)
 
@@ -85,7 +85,7 @@ RegisterNetEvent('uk_policebadge:use', function()
     showBadge()
 end)
 
-RegisterNetEvent('uk_policebadge:displaybadge', function(data)
+RegisterNetEvent('stevo_policebadge:displaybadge', function(data)
     SendNUIMessage({
         type = 'displayBadge',
         data = data,
@@ -105,7 +105,7 @@ RegisterCommand(config.set_image_command, function()
         return
     end
 
-    local ok = lib.callback.await('uk_policebadge:setBadgePhoto', false, input[1])
+    local ok = lib.callback.await('stevo_policebadge:setBadgePhoto', false, input[1])
     if ok then
         lib.alertDialog({
             header = config.department_name or 'Police',

@@ -1,6 +1,5 @@
 return {
     badge_item_name = 'stevo_policebadge',
-    legacy_item_names = { 'uk_policebadge' },
 
     job_names = { 'police' },
     badge_show_time = 5000,
@@ -12,7 +11,7 @@ return {
 
     set_image_command = 'setbadgephoto',
 
-    photo_table_name = 'uk_policebadge_photos',
+    photo_table_name = 'stevo_badge_photos',
     photo_url_max_length = 500,
 
     progress = {

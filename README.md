@@ -49,6 +49,5 @@ Open `resource/web/preview.html` in a browser to check text placement against `r
 ## Notes
 
 - The resource item name defaults to `stevo_policebadge`.
-- A legacy `uk_policebadge` item alias is still supported for local backward compatibility.
-- Photo records are stored in the `uk_policebadge_photos` table by default.
+- Photo records are stored in the `stevo_badge_photos` table by default.
 - Department name and warrant-card wording are config-driven rather than locale-driven.

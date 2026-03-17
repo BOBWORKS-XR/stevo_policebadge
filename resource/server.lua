@@ -1,5 +1,5 @@
 if not lib.checkDependency('stevo_lib', '1.6.7') then
-    error('uk_policebadge requires stevo_lib 1.6.7 or newer.')
+    error('stevo_policebadge requires stevo_lib 1.6.7 or newer.')
 end
 
 lib.locale()
@@ -13,9 +13,9 @@ if GetResourceState('qb-core') == 'started' then
 end
 
 local function sanitizeTableName(name)
-    local cleaned = tostring(name or 'uk_policebadge_photos'):gsub('[^%w_]', '')
+    local cleaned = tostring(name or 'stevo_badge_photos'):gsub('[^%w_]', '')
     if cleaned == '' then
-        cleaned = 'uk_policebadge_photos'
+        cleaned = 'stevo_badge_photos'
     end
     return cleaned
 end
@@ -90,7 +90,7 @@ local function getQbBadgeFields(source)
     return badgeNumber, callsign
 end
 
-lib.callback.register('uk_policebadge:retrieveInfo', function(source)
+lib.callback.register('stevo_policebadge:retrieveInfo', function(source)
     local badgeData = {}
     local identifier = stevo_lib.GetIdentifier(source)
     local job = stevo_lib.GetPlayerJobInfo(source) or {}
@@ -109,7 +109,7 @@ lib.callback.register('uk_policebadge:retrieveInfo', function(source)
     return badgeData
 end)
 
-lib.callback.register('uk_policebadge:setBadgePhoto', function(source, photo)
+lib.callback.register('stevo_policebadge:setBadgePhoto', function(source, photo)
     if not isPhotoUrlAllowed(photo) then
         return false, 'invalid_photo'
     end
@@ -125,9 +125,9 @@ lib.callback.register('uk_policebadge:setBadgePhoto', function(source, photo)
     return id ~= nil, id
 end)
 
-RegisterNetEvent('uk_policebadge:showbadge', function(data, players)
+RegisterNetEvent('stevo_policebadge:showbadge', function(data, players)
     for i = 1, #players do
-        TriggerClientEvent('uk_policebadge:displaybadge', players[i], data)
+        TriggerClientEvent('stevo_policebadge:displaybadge', players[i], data)
     end
 end)
 
@@ -144,25 +144,7 @@ AddEventHandler('onResourceStart', function(resource)
         UNIQUE KEY `identifier_unique` (`identifier`)
     )]]):format(PHOTO_TABLE))
 
-    local registered = {}
-
-    local function registerBadgeItem(itemName)
-        if type(itemName) ~= 'string' or itemName == '' or registered[itemName] then
-            return
-        end
-
-        registered[itemName] = true
-
-        stevo_lib.RegisterUsableItem(itemName, function(source)
-            TriggerClientEvent('uk_policebadge:use', source)
-        end)
-    end
-
-    registerBadgeItem(config.badge_item_name)
-
-    if type(config.legacy_item_names) == 'table' then
-        for i = 1, #config.legacy_item_names do
-            registerBadgeItem(config.legacy_item_names[i])
-        end
-    end
+    stevo_lib.RegisterUsableItem(config.badge_item_name, function(source)
+        TriggerClientEvent('stevo_policebadge:use', source)
+    end)
 end)
