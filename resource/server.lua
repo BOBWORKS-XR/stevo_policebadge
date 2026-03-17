@@ -144,7 +144,25 @@ AddEventHandler('onResourceStart', function(resource)
         UNIQUE KEY `identifier_unique` (`identifier`)
     )]]):format(PHOTO_TABLE))
 
-    stevo_lib.RegisterUsableItem(config.badge_item_name, function(source)
-        TriggerClientEvent('uk_policebadge:use', source)
-    end)
+    local registered = {}
+
+    local function registerBadgeItem(itemName)
+        if type(itemName) ~= 'string' or itemName == '' or registered[itemName] then
+            return
+        end
+
+        registered[itemName] = true
+
+        stevo_lib.RegisterUsableItem(itemName, function(source)
+            TriggerClientEvent('uk_policebadge:use', source)
+        end)
+    end
+
+    registerBadgeItem(config.badge_item_name)
+
+    if type(config.legacy_item_names) == 'table' then
+        for i = 1, #config.legacy_item_names do
+            registerBadgeItem(config.legacy_item_names[i])
+        end
+    end
 end)

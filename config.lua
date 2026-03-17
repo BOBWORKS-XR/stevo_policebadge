@@ -1,5 +1,6 @@
 return {
-    badge_item_name = 'uk_policebadge',
+    badge_item_name = 'stevo_policebadge',
+    legacy_item_names = { 'uk_policebadge' },
 
     job_names = { 'police' },
     badge_show_time = 5000,

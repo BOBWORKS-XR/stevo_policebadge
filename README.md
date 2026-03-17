@@ -1,4 +1,4 @@
-# uk_policebadge
+# stevo_policebadge
 
 UK-oriented fork of `stevo_policebadge`, adapted for a warrant-card style display and aimed at QBCore while still keeping `stevo_lib` as the framework bridge.
 
@@ -13,22 +13,22 @@ UK-oriented fork of `stevo_policebadge`, adapted for a warrant-card style displa
 - Badge number: `badge`, `badge_number`, `badgeNumber`, `collar`
 - Callsign: `callsign`, `callSign`
 
-Change these in [config.lua](C:/Users/bobman/fivem-qbcore-local/data/resources/[local]/uk_policebadge/config.lua) if your server uses different metadata.
+Change these in `config.lua` if your server uses different metadata.
 
 ## QBCore install notes
 
-This repository contains the `uk_policebadge` resource itself.
+This repository is intended to be installed under the original resource name: `stevo_policebadge`.
 
 These two QBCore integration steps live outside this repo and must be applied on the target server:
 
 1. Add the item in `qb-core/shared/items.lua`
 ```lua
-uk_policebadge = {
-    name = 'uk_policebadge',
+stevo_policebadge = {
+    name = 'stevo_policebadge',
     label = 'Warrant Card',
     weight = 0,
     type = 'item',
-    image = 'uk_policebadge.png',
+    image = 'stevo_policebadge.png',
     unique = true,
     useable = true,
     shouldClose = false,
@@ -36,9 +36,9 @@ uk_policebadge = {
 },
 ```
 
-2. Add an inventory icon named `uk_policebadge.png` to `qb-inventory/html/images`
+2. Add an inventory icon named `stevo_policebadge.png` to `qb-inventory/html/images`
 
-   A ready-to-copy icon is included in this repo at `install/qb-inventory/uk_policebadge.png`
+   A ready-to-copy icon is included in this repo at `install/qb-inventory/stevo_policebadge.png`
 
 The runtime badge artwork used by this resource is stored at `resource/web/img/badge.png`.
 
@@ -48,6 +48,7 @@ Open `resource/web/preview.html` in a browser to check text placement against `r
 
 ## Notes
 
-- The resource item name defaults to `uk_policebadge`.
+- The resource item name defaults to `stevo_policebadge`.
+- A legacy `uk_policebadge` item alias is still supported for local backward compatibility.
 - Photo records are stored in the `uk_policebadge_photos` table by default.
 - Department name and warrant-card wording are config-driven rather than locale-driven.
